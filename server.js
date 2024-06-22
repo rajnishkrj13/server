@@ -161,7 +161,7 @@ app.delete('/api/delete/:id', authenticate, (req, res) => {
 
   console.log(`Received request to delete file with ID: ${id}`); // Logging the ID
 
-  db.query('SELECT file FROM responses WHERE rowId = ? AND user_id = ? AND is_deleted = FALSE', [id, req.user.userId], (err, result) => {
+  db.query('SELECT file FROM responses WHERE id = ? AND user_id = ? AND is_deleted = FALSE', [id, req.user.userId], (err, result) => {
     console.log(req.user.userId)
     if (err) {
       console.error('Error fetching file info:', err);
@@ -172,7 +172,7 @@ app.delete('/api/delete/:id', authenticate, (req, res) => {
       return res.status(404).json({ success: false, message: 'File not found' });
     }
 
-    db.query('UPDATE responses SET is_deleted = TRUE WHERE rowId = ? AND user_id = ?', [id, req.user.userId], (dbErr, updateResult) => {
+    db.query('UPDATE responses SET is_deleted = TRUE WHERE id = ? AND user_id = ?', [id, req.user.userId], (dbErr, updateResult) => {
       if (dbErr) {
         console.error('Error marking file as deleted in database:', dbErr);
         return res.status(500).json({ success: false, message: 'Failed to mark file as deleted in database' });
